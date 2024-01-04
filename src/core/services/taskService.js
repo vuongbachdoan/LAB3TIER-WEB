@@ -1,12 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'https://qfu0uf8srk.execute-api.us-east-1.amazonaws.com',
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  },
+  baseURL: 'https://qfu0uf8srk.execute-api.us-east-1.amazonaws.com'
 });
 
 const getTodo = async (userId) => {
@@ -20,7 +15,12 @@ const createTodo = async (task) => {
   });
 }
 
+const deleteTodo = async (id) => {
+    return await axiosInstance.delete(`/api/v1/app/todos/${id}`);
+  }
+
 export const taskService = {
   getTodo,
-  createTodo
+  createTodo,
+  deleteTodo
 };

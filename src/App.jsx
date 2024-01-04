@@ -1,5 +1,5 @@
-import { Button, Container, Dropdown, Row, Spacer, Table, Text } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { Button, Container, Dropdown, Input, Row, Spacer, Table, Text } from '@nextui-org/react';
+import React, { useEffect, useState } from 'react';
 import { userService } from './core/services/userService';
 import { todoService } from './core/services/todoService';
 import { taskService } from './core/services/taskService';
@@ -40,11 +40,15 @@ export default function App() {
     // }, [currentUser]);
 
     useEffect(() => {
-        taskService.getTodo() 
+        loadTask();
+    }, [])
+
+    const loadTask = () => {
+        taskService.getTodo()
             .then((res) => {
                 setTasks(res.data)
             })
-    }, [])
+    }
 
     // const markDone = (taskId) => {
     //     toggleLoading(true);
@@ -73,12 +77,24 @@ export default function App() {
 
     const handleAddContent = () => {
         taskService.createTodo("New task test by Vuong!")
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
+            .then((res) => {
+                loadTask();
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+
+    const [key, setKey] = React.useState(1);
+    const handleDelete = () => {
+        taskService.deleteTodo(key)
+            .then((res) => {
+                loadTask();
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     return (
@@ -86,7 +102,20 @@ export default function App() {
             <Row justify='space-between'>
                 <Text h4 color='secondary'>TASKS</Text>
             </Row>
+            
+            <Spacer y={1} />
+
             <Button onClick={handleAddContent}>Add some task</Button>
+            
+            <Spacer y={1} />
+
+            <Row>
+                <Input value={key} onChange={(e) => setKey(e.target.value)} placeholder='Enter key to delete or update' />
+                <Button color='error' style={{marginLeft: 15}} onClick={handleDelete}>Delete task 13</Button>
+            </Row>
+            
+            <Spacer y={1} />
+
             <Table
                 bordered
                 shadow={true}
@@ -116,7 +145,7 @@ export default function App() {
                                 <Table.Row key={task.id}>
                                     <Table.Cell>
                                         <Row align='center'>
-                                            {task.content}
+                                            Key {task.id} : {task.content}
                                         </Row>
                                     </Table.Cell>
                                 </Table.Row>
