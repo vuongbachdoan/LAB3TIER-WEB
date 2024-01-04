@@ -71,11 +71,22 @@ export default function App() {
     //     setDoneTasksNum(countDoneTask(tasks));
     // }, [tasks])
 
+    const handleAddContent = () => {
+        taskService.createTodo("New task test by Vuong!")
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
+
     return (
         <Container>
             <Row justify='space-between'>
                 <Text h4 color='secondary'>TASKS</Text>
             </Row>
+            <Button onClick={handleAddContent}>Add some task</Button>
             <Table
                 bordered
                 shadow={true}
